@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRコードチケット申請サイト</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <style>
+        body {
+            font-family: "PlexMono", monospace;
+            margin: 10px;
+            padding: 10px;
+            background: linear-gradient(180deg, #ebeced 0%, #dde6f0 46.35%, #ffffff 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .form-background {
+            background: rgb(242, 242, 237);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin: 0 10px;
+        }
+
+        .header-image {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 25px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 50px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 13px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .email-section {
+            background: linear-gradient(180deg, #bbc5fd 0%, #f8bcf5 46.35%);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 50px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .student-id-section {
+            background: linear-gradient(180deg, #bbc5fd 0%, #f8bcf5 46.35%);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .visitor-section {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 60px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            font-weight: bolder;
+            font-size: 18px;
+        }
+
+        .button_submit {
+            background: #ff66cc;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            width: 40%;  
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            display: block;  
+            margin: 0 auto;  
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .button_submit:hover {
+            background: #ff50c3;
+        }
+
+
+        .scroll-text {
+            text-align: center;
+            color: #000000;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .xtc-logo {
+            width: 70%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .form_tickets {            
+            background: linear-gradient(180deg, #bbc5fd 0%, #f8bcf5 46.35%);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 50px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .club-info {
+            text-align: center;
+            font-weight: bold;
+            color: black;
+            margin: 15px 0;
+            font-size: 15px;
+            line-height: 1.3;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-background">
+            <img src="../static/fixed_ticket_form_header.jpg" alt="MIF 2024 QRコードチケット申請サイト" class="header-image">
+
+            <form id="form">
+                <div class="scroll-text">
+                    <br>scroll<br>▼<br><br><br>
+                </div>
+
+                <div class="form-section">
+                    <div class="form_name">
+                        <label>生徒の氏名(ローマ字入力)</label>
+                        <input type="text" name="last_name" id="last_name" pattern="[A-Za-z\s]+" inputmode="latin" placeholder="姓" required>
+                        <input type="text" name="first_name" id="first_name" pattern="[A-Za-z\s]+" inputmode="latin" placeholder="名" required>
+                    </div>
+                </div>
+
+                <div class="email-section">
+                    <!-- <label>生徒のメールアドレス(...@mita-is.ed.jp)</label> -->
+                    <label>保護者のメールアドレス(...@mita-is.ed.jp)</label>
+                    <input type="email" name="email" id="email" placeholder="例）support@example.com" required>
+                    <input type="email" name="email_confirm" id="email_confirm" placeholder="確認用" required>
+                </div>
+
+                <div class="form-section">
+                    <div class="form_student_info">
+                        <label>生徒情報</label>
+                        <select name="school_grades" id="school_grades" required>
+                            <option value="" disabled selected>学年を選択してください</option>
+                            <option value="J1">J1</option>
+                            <option value="J2">J2</option>
+                            <option value="J3">J3</option>
+                            <option value="S1">S1</option>
+                            <option value="S2">S2</option>
+                        </select>
+                        <select name="classes" id="classes" required>
+                            <option value="" disabled selected>クラスを選択してください</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                        </select>
+                        <select name="student_number" id="student_number" required>
+                            <option value="" disabled selected>出席番号を選択してください</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                            <option value="32">32</option>
+                            <option value="33">33</option>
+                            <option value="34">34</option>
+                            <option value="35">35</option>
+                            <option value="36">36</option>
+                            <option value="37">37</option>
+                            <option value="38">38</option>
+                            <option value="39">39</option>
+                            <option value="40">40</option>
+                            <option value="41">41</option>
+                            <option value="42">42</option>
+                            <option value="43">43</option>
+                            <option value="44">44</option>
+                            <option value="45">45</option>
+                            <option value="46">46</option>
+                            <option value="47">47</option>
+                            <option value="48">48</option>
+                            <option value="49">49</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form_tickets">
+                    <label>希望チケット枚数</label>
+                    <select name="ticket_quantity" id="ticketQuantity" onchange="showGuestNameForms()" required>
+                        <option value="" disabled selected>__選択してください__</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+
+                <div class="visitor-section">
+                    <label>来場者氏名</label>
+                    <div class="visitor-names" id="guestNameFormContainer"></div>
+                </div>
+                <img src="../static/XTC_Symbol_Logo_Illustration.png" alt="MIF 2024 QRコードチケット申請サイト" class="xtc-logo">
+
+                <div class="club-info">
+                    本サービスは、校内の有志団体 <br>「シャオリン's テッククラブ」により<br>運営、管理されています。
+                </div>
+
+                <button type="submit" class="button_submit" formaction="/" formmethod="post">確認する</button>
+            </form>
+
+        </div>
+    </div>
+    <script src="../static/student.js"></script>
+</body>
+</html>

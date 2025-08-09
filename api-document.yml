@@ -1,0 +1,558 @@
+openapi: '3.0.2'
+info:
+  title: XTC e-ticket API
+  version: '1.0'
+  description: >-
+    This is the documentation for the e-ticket api that can be used in any project 
+    relating to entry management for events through qrcode e-tickets.
+  contact:
+    name: Xiaolin's Techclub
+    url: https://xiaolinstechclub.com
+    email: support@example.com
+servers:
+  - url: https://mis.xiaolinstechclub.com/api/v1
+    description: Production server
+  - url: http://127.0.0.1:80/api/v1
+    description: Local docker server
+  - url: http://127.0.0.1:5000/api/v1
+    description: Local flask server
+tags:
+  - name: User
+    description: User related endpoints
+  - name: Ticket
+    description: Ticket related endpoints
+  - name: Validation
+    description: Entry validation related endpoints
+  - name: Data
+    description: Data related endpoints
+paths:
+  /entry/validate/{ticket_hash}:
+    get:
+      tags:
+        - Validation
+      summary: Validate ticket entry
+      parameters:
+        - name: ticket_hash
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Valid ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: server internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /entry/total_number:
+    get:
+      tags:
+        - Validation
+      summary: Get total number of entries
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '500':
+          description: server internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /exit/validate/{user_hash}:
+    get:
+      tags:
+        - Validation
+      summary: Validate exit
+      parameters:
+        - name: user_hash
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found or server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /exit/total_number:
+    get:
+      tags:
+        - Validation
+      summary: Get total number of exits
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found or server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/id/{userid}:
+    get:
+      tags:
+        - User
+      summary: Get user by userid
+      parameters:
+        - name: userid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserObject'
+        '404':
+          description: User not found or server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/limit/{limit}:
+    get:
+      tags:
+        - User
+      summary: Get the first n users in the database
+      parameters:
+        - name: limit
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        '404':
+          description: server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/all/total_number:
+    get:
+      tags:
+        - User
+      summary: Get total number of users in the database
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/all/reset_ticket_usage/{force}:
+    get:
+      tags:
+        - User
+      summary: Reset all ticket usage
+      parameters:
+        - name: force
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: All ticket usage reset successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTicketObject'
+        '500':
+          description: Ticket could not be reset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/all/reset_ticket_application:
+    get:
+      tags:
+        - User
+      summary: Reset all ticket application
+      responses:
+        '200':
+          description: All ticket application reset successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTicketObject'
+        '500':
+          description: Ticket application status could not be reset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /ticket/id/{userid}/{ticket_id}:
+    get:
+      tags:
+        - Ticket
+      summary: Get user ticket by user id and ticket id
+      parameters:
+        - name: userid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: ticket_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTicketObject'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Ticket
+      summary: Delete user ticket by user id and ticket id
+      parameters:
+        - name: userid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: ticket_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTicketObject'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /ticket/hash/{ticket_hash}:
+    get:
+      tags:
+        - Ticket
+      summary: Get user ticket by ticket hash
+      parameters:
+        - name: ticket_hash
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTicketObject'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /ticket/limit/{limit}:
+    get:
+      tags:
+        - Ticket
+      summary: Get the first n user tickets in the database
+      parameters:
+        - name: limit
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /ticket/all/total_number:
+    get:
+      tags:
+        - Ticket
+      summary: Get total number of user tickets in the database
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '500':
+          description: Server internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /ticket/{userid}/{invited_name}:
+    post:
+      tags:
+        - Ticket
+      summary: Create user ticket by user id and invited name
+      parameters:
+        - name: userid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: invited_name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTicketObject'
+        '400':
+          description: User not created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /ticket/all/{force}:
+    delete:
+      tags:
+        - Ticket
+      summary: Delete all user tickets
+      parameters:
+        - name: force
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: All user deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTicketObject'
+        '500':
+          description: User could not be deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /ticket/all/reset_ticket_usage/{force}:
+    get:
+      tags:
+        - Ticket
+      summary: Reset all ticket usage
+      parameters:
+        - name: force
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: All ticket usage reset successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTicketObject'
+        '500':
+          description: Ticket could not be reset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /data/export_backup:
+    get:
+      tags:
+      - Data
+      summary: Export backup into sqlite db(will change into csv format in the future)
+      responses:
+        '200':
+          description: Successfully exported database to local storage
+        '500':
+          description: Error exporting database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Users:
+      type: object
+      properties:
+        code:
+          type: integer
+        msg:
+          type: string
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserTicketObject'
+    User:
+      type: object
+      properties:
+        code:
+          type: integer
+        msg:
+          type: string
+        result:
+          $ref: '#/components/schemas/UserTicketObject'
+    UserTicketObject:
+      type: object
+      properties:
+        userid:
+          type: string
+          format: uuid
+          description: ticket id of the user
+        ticket_id:
+          type: integer
+          format: uuid
+          description: ticket id of the user
+        created_at:
+          type: string
+          format: date-time
+        invited_name:
+          type: string
+          description: name of the invited person
+        ticket_hash:
+          type: string
+          description: hash of the user's ticket
+        entry_day1:
+          type: integer
+          description: remaining ticket usage for day 1
+        entry_day2:
+          type: integer
+          description: remaining ticket usage for day 2
+        exit_day1:
+          type: integer
+          description: exit count for day 1
+        exit_day2:
+          type: integer
+          description: exit count for day 2
+        entry_total:
+          type: integer
+          description: total entry count(because entry_day1 and entry_day2 are cumulative)
+        entry_time_day1:
+          type: string
+          format: date-time
+          description: entry-time for day 1
+        entry_time_day2:
+          type: string
+          format: date-time
+          description: entry-time for day 2
+        exit_time_day1:
+          type: string
+          format: date-time
+          description: exit-time for day 1
+        exit_time_day2:
+            type: string
+            format: date-time
+            description: exit-time for day 2
+    UserObject:
+      type: object
+      properties:
+        userid:
+          type: string
+          description: userid(like S2E12) of the user
+        username:
+          type: string
+          description: name of the user
+        first_name:
+          type: string
+          description: first name of the user
+        last_name:
+          type: string
+          description: last name of the user
+        student_uuid:
+          type: integer
+          description: student uuid(int) of the user
+        email:
+            type: string
+            description: email of the user
+        password_hash:
+            type: string
+            description: hashed password of the user
+        mif24_requested_ticket_number:
+            type: integer
+            description: number of tickets requested by the user for mif24
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 404
+        result:
+          type: string
+          example: null
+        msg:
+          type: string
+          example: User not found

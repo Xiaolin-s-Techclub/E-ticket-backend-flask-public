@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRコードチケット申請サイト</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <style>
+        body {
+            font-family: "PlexMono", monospace;
+            margin: 10px;
+            padding: 10px;
+            background: linear-gradient(180deg, #4158D0 0%, #C850C0 46.35%, #FFCC70 100%);
+            min-height: 100vh;
+        }
+    .container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .form-background {
+        background: rgba(240, 240, 231);
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin: 0 10px;
+    }
+
+    .header-image {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+        border-radius: 25px;
+        margin: 0 auto 20px;
+        display: block;
+    }
+
+    .form-section {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        font-weight: bold;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        font-size: 15px;
+        margin-bottom: 13px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    .email-section {
+        background: linear-gradient(180deg, #bbc5fd 0%, #f8bcf5 46.35%);
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .visitor-section {
+        background: linear-gradient(180deg, #bbc5fd 0%, #f8bcf5 46.35%);
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        font-weight: bolder;
+        font-size: 18px;
+    }
+
+    .button_submit {
+        background: #ff66cc;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        width: 100%;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .button_submit:hover {
+        background: #ff50c3;
+    }
+
+    .scroll-text {
+        text-align: center;
+        color: #000000;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-background">
+            <img src="../static/website_header.png" alt="MIF 2024 QRコードチケット申請サイト" class="header-image">
+            <form id="form">
+            <div class="scroll-text">
+                scroll<br>▼
+            </div>
+
+            <div class="form-section">
+                <div class="form_name">
+                    <label>氏名(ローマ字入力) - Full Name</label>
+                    <input type="text" name="last_name" id="last_name" pattern="[A-Za-z\s]+" inputmode="latin" placeholder="姓 - Last Name" required>
+                    <input type="text" name="first_name" id="first_name" pattern="[A-Za-z\s]+" inputmode="latin" placeholder="名 - First Name" required>
+                </div>
+            </div>
+
+            <div class="email-section">
+                <label>メールアドレス - email address</label>
+                <input type="email" name="email" id="email" placeholder="Email" required>
+                <input type="email" name="email_confirm" id="email_confirm" placeholder="確認用 - type again" required>
+            </div>
+
+            <div class="form-section">
+                <div class="form_tickets">
+                    <label>希望チケット枚数 - ticket quantity</label>
+                    <select name="ticket_quantity" id="ticketQuantity" onchange="showGuestNameForms()" required>
+                        <option value="" disabled selected>__選択してください__ - please select</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="visitor-section">
+                <label>来場者氏名 - visitor names(will be printed on the ticket)</label>
+                <div class="visitor-names" id="guestNameFormContainer"></div>
+            </div>
+
+            <button type="submit" class="button_submit" formaction="/teacher-page" formmethod="post">確認する - confirm</button>
+        </form>
+
+    </div>
+</div>
+<script src="../static/teacher.js"></script>
+</body>
+</html>

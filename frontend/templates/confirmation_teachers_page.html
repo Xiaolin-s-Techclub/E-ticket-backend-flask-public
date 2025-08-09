@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>申請内容の確認 - QRコードチケット</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <style>
+        body {
+            font-family: "PlexMono", monospace;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #e4adf5 0%, #acbcee 30%, #b0e2fa 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .confirmation-background {
+            background: rgba(240, 240, 231);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin: 0 10px;
+        }
+
+        .header-image {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 25px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .confirmation-title {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .confirmation-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-group {
+            margin-bottom: 10px;
+            padding: 8px;
+            background: linear-gradient(180deg, #bbc5fd 0%, #bbc5fd 46.35%);
+            border-radius: 8px;
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 8px;
+            margin-top: 5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            color: #000;
+            padding: 5px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 4px;
+        }
+
+        .guest-list {
+            margin-top: 10px;
+        }
+
+        .guest-item {
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button_submit {
+            background: #ff66cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .button_back {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .button_submit:hover {
+            background: #ff50c3;
+        }
+
+        .button_back:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <form action="/confirm-teacher" method="post">
+        <div class="container">
+            <div class="confirmation-background">
+
+                <div class="confirmation-title">入力内容の確認 - Confirmation</div>
+
+                <div class="confirmation-section">
+                    <div class="info-group">
+                        <div class="info-label">氏名 - Name</div>
+                        <div class="info-value" id="confirm-name"></div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">メールアドレス - email address</div>
+                        <div class="info-value" id="confirm-email"></div>
+                    </div>
+
+{#                    <div class="info-group">#}
+{#                        <div class="info-label">学年・クラス・出席番号</div>#}
+{#                        <div class="info-value" id="confirm-class-info"></div>#}
+{#                    </div>#}
+
+{#                    <div class="info-group">#}
+{#                        <div class="info-label">学籍番号</div>#}
+{#                        <div class="info-value" id="confirm-student-id"></div>#}
+{#                    </div>#}
+
+                    <div class="info-group">
+                        <div class="info-label">チケット枚数</div>
+                        <div class="info-value" id="confirm-ticket-quantity"></div>
+                        <div class="info-label">来場者一覧</div>
+                        <div class="guest-list" id="confirm-guest-list"></div>
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button type="button" class="button_back" onclick="goBack()">修正する - Fix info</button>
+                    <button type="submit" class="button_submit">確定して送信 - Submit</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // Fill in confirmation details
+            document.getElementById('confirm-name').textContent =
+                `${urlParams.get('last_name')} ${urlParams.get('first_name')}`;
+
+            document.getElementById('confirm-email').textContent =
+                urlParams.get('email');
+
+            {#document.getElementById('confirm-class-info').textContent =#}
+            {#    `${urlParams.get('school_grades')}-${urlParams.get('classes')}-${urlParams.get('student_number')}`;#}
+            {##}
+            {#document.getElementById('confirm-student-id').textContent =#}
+            {#    urlParams.get('student_school_uuid');#}
+
+            document.getElementById('confirm-ticket-quantity').textContent =
+                `${urlParams.get('ticket_quantity')}枚`;
+
+            // Display guest list
+            const guestListContainer = document.getElementById('confirm-guest-list');
+            const ticketQuantity = parseInt(urlParams.get('ticket_quantity'));
+
+            for (let i = 1; i <= ticketQuantity; i++) {
+                const guestName = urlParams.get(`guestName${i}`);
+                const guestElement = document.createElement('div');
+                guestElement.className = 'guest-item';
+                guestElement.textContent = `${i}. ${guestName}`;
+                guestListContainer.appendChild(guestElement);
+            }
+        });
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function submitForm() {
+            // Here you would typically submit the form data to your server
+            // For now, we'll just show an alert
+            {#alert('申請が完了しました。');#}
+            // Redirect to a thank you page or home page
+            {#window.location.href = 'success.html';#}
+        }
+        function disableSubmitButton() {
+            const form = document.querySelector('form[action="/confirm-teacher"]');
+            const submitButton = form.querySelector('button[type="submit"]');
+
+            form.addEventListener('submit', function() {
+                submitButton.disabled = true;
+                submitButton.textContent = '送信中.../sending...';
+            });
+        }
+    </script>
+</body>
+</html>
